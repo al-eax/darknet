@@ -236,6 +236,13 @@ image **load_alphabet()
     return alphabets;
 }
 
+#include <stdio.h>
+void save_bb(int left,int top,int right,int bot,int width, char* label){
+    FILE *out = fopen("bb.txt", "a");  
+    fprintf(out, "%s;%i;%i;%i;%i \n",label, left,top,right,bot);  
+    fclose(out); 
+}
+
 void draw_detections(image im, detection *dets, int num, float thresh, char **names, image **alphabet, int classes)
 {
     int i,j;
@@ -292,6 +299,7 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
 
             draw_box_width(im, left, top, right, bot, width, red, green, blue);
             if (alphabet) {
+                save_bb(left,top,right,bot,width,labelstr);
                 image label = get_label(alphabet, labelstr, (im.h*.03));
                 draw_label(im, top + width, left, label, rgb);
                 free_image(label);
